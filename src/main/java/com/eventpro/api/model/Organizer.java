@@ -21,7 +21,7 @@ public class Organizer extends User {
     private String nom_organisation;
 
 
-    @OneToMany (mappedBy = "organizers",fetch = FetchType.EAGER)
+    @OneToMany (mappedBy = "organizer",fetch = FetchType.EAGER)
     private List<Event> eventList = new ArrayList<>();
 
 

@@ -25,8 +25,11 @@ public class UserRegistrationRequest {
     @NotBlank (message = "user type is required")
     private UserType userType;
 
+    @NotBlank (message = "password is required")
+    private String Password;
 
-    private String organization_name;
-    private String telephone;
+
+    private String OrganisationName;
+    private String phone;
 
 }

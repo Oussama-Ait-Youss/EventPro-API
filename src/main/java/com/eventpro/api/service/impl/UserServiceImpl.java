@@ -2,6 +2,8 @@ package com.eventpro.api.service.impl;
 
 import com.eventpro.api.dto.user.UserRegistrationRequest;
 import com.eventpro.api.dto.user.UserResponse;
+import com.eventpro.api.exception.EmailAlreadyExistsException;
+import com.eventpro.api.exception.InvalidUserTypeException;
 import com.eventpro.api.mapper.UserMapper;
 import com.eventpro.api.model.*;
 import com.eventpro.api.repository.UserRepository;
@@ -28,7 +30,7 @@ public class UserServiceImpl implements UserService {
 
         // 1. Check if email already exists
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new IllegalArgumentException("Email already exists");
+            throw new EmailAlreadyExistsException("Email already exists");
         }
 
         // 2. Create the correct subclass
@@ -56,7 +58,7 @@ public class UserServiceImpl implements UserService {
                 user = new AgentConrol();
             }
 
-            default -> throw new IllegalArgumentException("Invalid user type");
+            default -> throw new InvalidUserTypeException("Invalid user type");
         }
 
         // 3. Set common attributes

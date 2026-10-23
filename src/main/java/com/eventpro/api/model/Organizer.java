@@ -18,7 +18,7 @@ public class Organizer extends User {
 
 
     @Column (name = "organisation_name")
-    private String nom_organisation;
+    private String OrganisationName;
 
 
     @OneToMany (mappedBy = "organizer",fetch = FetchType.EAGER)

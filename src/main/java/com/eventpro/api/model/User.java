@@ -1,6 +1,7 @@
 package com.eventpro.api.model;
 
 
+import com.eventpro.api.model.enums.UserType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -17,19 +18,25 @@ public abstract class User {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column (name = "first_name")
-    private String FirstName;
 
-    @Column (name = "last_name")
-    private String LastName;
+
+    @Column (name = "name")
+    private String name;
 
 
     @Column (name = "email")
     private String email;
 
 
-    @Column (name = "password_hash")
-    private String PasswordHash;
+    @Column (name = "isActive",nullable = false)
+    private boolean isActive;
+
+
+    @Column (name = "password")
+    private String Password;
+
+    @Enumerated
+    private UserType role;
 
 
 }

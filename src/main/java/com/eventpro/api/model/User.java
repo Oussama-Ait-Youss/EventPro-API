@@ -28,14 +28,15 @@ public abstract class User {
     private String email;
 
 
-    @Column (name = "isActive",nullable = false)
-    private boolean isActive;
+    @Column(name = "is_active", nullable = false)
+    private boolean active = true;
 
 
     @Column (name = "password")
-    private String Password;
+    private String password;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
     private UserType role;
 
 

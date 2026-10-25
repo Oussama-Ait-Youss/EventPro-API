@@ -22,14 +22,15 @@ public class UserRegistrationRequest {
     @Email (message = "invalide email format")
     private String email;
 
-    @NotBlank (message = "user type is required")
+    @NotNull (message = "user type is required")
     private UserType userType;
 
     @NotBlank (message = "password is required")
-    private String Password;
+    private String password;
 
 
-    private String OrganisationName;
+
+    private String organisationName;
     private String phone;
 
 }

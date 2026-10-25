@@ -28,47 +28,17 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserResponse register(UserRegistrationRequest request) {
 
-        // 1. Check if email already exists
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new EmailAlreadyExistsException("Email already exists");
         }
 
-        // 2. Create the correct subclass
-        User user;
+        // Map the request to the correct entity subtype.
+        User user = userMapper.toNewUser(request);
 
-        switch (request.getUserType()) {
-
-            case ADMIN -> {
-                user = new Admin();
-            }
-
-            case ORGANIZER -> {
-                Organizer organizer = new Organizer();
-                organizer.setOrganisationName(request.getOrganisationName());
-                user = organizer;
-            }
-
-            case CLIENT -> {
-                Client client = new Client();
-                client.setPhone(request.getPhone());
-                user = client;
-            }
-
-            case CONTROL_AGENT -> {
-                user = new AgentConrol();
-            }
-
-            default -> throw new InvalidUserTypeException("Invalid user type");
-        }
-
-        // 3. Set common attributes
-        user.setName(request.getName());
-        user.setEmail(request.getEmail());
-
-        // 4. Save the user
+        // Save the entity.
         User savedUser = userRepository.save(user);
 
-        // 5. Convert Entity to DTO
+        // Map to the response matching the entity subtype.
         return userMapper.toResponse(savedUser);
     }
 }

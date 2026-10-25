@@ -23,7 +23,6 @@ public class UserController {
     public UserResponse register(@Valid @RequestBody UserRegistrationRequest request) {
 
         return userService.register(request);
-
     }
 
 }

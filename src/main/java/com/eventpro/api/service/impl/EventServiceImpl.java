@@ -26,6 +26,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -157,6 +158,14 @@ public class EventServiceImpl implements EventService {
                     "Ticket sales must end before the event starts"
             );
         }
+    }
+    @Override
+    @Transactional
+    public List<EventResponse> getAllEvents() {
+        return eventRepository.findAll()
+                .stream()
+                .map(eventMapper::toResponse)
+                .toList();
     }
 
     private void validateTicketCategories(EventCreateRequest request) {

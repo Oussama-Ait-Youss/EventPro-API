@@ -16,12 +16,14 @@ import com.eventpro.api.repository.OrganizerRepository;
 import com.eventpro.api.repository.PromotionRepository;
 import com.eventpro.api.repository.TicketCategoryRepository;
 import com.eventpro.api.service.PromotionService;
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -46,6 +48,15 @@ public class PromotionServiceImpl implements PromotionService {
         this.promotionMapper = promotionMapper;
         this.eventRepository = eventRepository;
         this.organizerRepository = organizerRepository;
+    }
+
+    @Override
+    @Transactional
+    public List<PromotionResponse> getAllPromotions() {
+        return promotionRepository.findAll()
+                .stream()
+                .map(promotionMapper::toResponse)
+                .toList();
     }
 
 

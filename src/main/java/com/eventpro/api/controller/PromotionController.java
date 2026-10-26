@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/promotions")
 public class PromotionController {
@@ -36,5 +38,10 @@ public class PromotionController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<PromotionResponse>> getAllPromotions() {
+        return ResponseEntity.ok(promotionService.getAllPromotions());
     }
 }

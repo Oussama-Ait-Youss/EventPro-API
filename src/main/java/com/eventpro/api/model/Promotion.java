@@ -27,8 +27,8 @@ public class Promotion {
     @JoinColumn(name = "organizer_id", nullable = false)
     private Organizer organizer;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "event_id", nullable = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "event_id", nullable = false, unique = true)
     private Event event;
 
     @Column(nullable = false, unique = true, length = 50)

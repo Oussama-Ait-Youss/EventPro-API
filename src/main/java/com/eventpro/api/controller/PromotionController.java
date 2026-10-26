@@ -1,0 +1,40 @@
+package com.eventpro.api.controller;
+
+import com.eventpro.api.dto.promotion.PromotionCreateRequest;
+import com.eventpro.api.dto.promotion.PromotionResponse;
+import com.eventpro.api.service.PromotionService;
+
+import jakarta.validation.Valid;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/promotions")
+public class PromotionController {
+
+    private final PromotionService promotionService;
+
+    public PromotionController(PromotionService promotionService) {
+        this.promotionService = promotionService;
+    }
+
+    @PostMapping("/organizers/{organizerId}/events/{eventId}")
+    public ResponseEntity<PromotionResponse> createPromotion(
+            @PathVariable Long organizerId,
+            @PathVariable Long eventId,
+            @Valid @RequestBody PromotionCreateRequest request) {
+
+        PromotionResponse response = promotionService.createPromotion(
+                organizerId,
+                eventId,
+                request
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(response);
+    }
+}

@@ -17,7 +17,7 @@ public interface EventMapper {
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "organizer", ignore = true)
     @Mapping(target = "ticketCategories", ignore = true)
-    @Mapping(target = "promotions", ignore = true)
+    @Mapping(target = "promotion", ignore = true)
     @Mapping(target = "salesOpeningDate", source = "salesStartDate")
     @Mapping(target = "salesClosingDate", source = "salesEndDate")
     Event toEntity(EventCreateRequest request);

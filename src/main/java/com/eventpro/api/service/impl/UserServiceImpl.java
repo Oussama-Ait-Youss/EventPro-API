@@ -11,6 +11,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -38,5 +40,14 @@ public class UserServiceImpl implements UserService {
 
         // Map to the response matching the entity subtype.
         return userMapper.toResponse(savedUser);
+    }
+
+    @Override
+    @Transactional
+    public List<UserResponse> getAllUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(userMapper::toResponse)
+                .toList();
     }
 }

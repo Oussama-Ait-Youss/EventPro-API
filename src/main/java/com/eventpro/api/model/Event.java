@@ -61,8 +61,8 @@ public class Event {
     private List<TicketCategoriesPerEvent> ticketCategories =
             new ArrayList<>();
 
-    @OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
-    private List<Promotion> promotions = new ArrayList<>();
+    @OneToOne(mappedBy = "event", fetch = FetchType.LAZY)
+    private Promotion promotion;
 
     public void addTicketCategory(TicketCategoriesPerEvent category) {
         ticketCategories.add(category);

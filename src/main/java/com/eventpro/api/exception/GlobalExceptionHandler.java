@@ -89,6 +89,7 @@ public class GlobalExceptionHandler {
                 ));
     }
 
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Map<String, Object>> handleDatabaseError(
             DataIntegrityViolationException ex,
@@ -165,19 +166,32 @@ public class GlobalExceptionHandler {
             Exception ex,
             HttpServletRequest request) {
 
-        log.error(
-                "Unexpected error at {}",
-                request.getRequestURI(),
-                ex
+        // Print the full exception in IntelliJ
+        log.error("Unexpected error at {}", request.getRequestURI(), ex);
+
+        Map<String, Object> body = buildError(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                ex.getMessage() != null
+                        ? ex.getMessage()
+                        : "Unknown server error",
+                request.getRequestURI()
         );
+
+        // Show the exception class
+        body.put("exception", ex.getClass().getName());
+
+        // Show the root cause
+        Throwable rootCause = ex;
+
+        while (rootCause.getCause() != null) {
+            rootCause = rootCause.getCause();
+        }
+
+        body.put("rootCause", rootCause.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(buildError(
-                        HttpStatus.INTERNAL_SERVER_ERROR,
-                        "An unexpected error occurred. Check server logs.",
-                        request.getRequestURI()
-                ));
+                .body(body);
     }
 
     private Map<String, Object> buildError(
@@ -204,4 +218,63 @@ public class GlobalExceptionHandler {
 
         return body;
     }
+
+
+    //=========== promotion =================
+//    @ExceptionHandler(EventNotFoundException.class)
+//    public ResponseEntity<Map<String, Object>> handleEventNotFound(
+//            EventNotFoundException ex,
+//            HttpServletRequest request) {
+//
+//        return ResponseEntity
+//                .status(HttpStatus.NOT_FOUND)
+//                .body(buildError(
+//                        HttpStatus.NOT_FOUND,
+//                        ex.getMessage(),
+//                        request.getRequestURI()
+//                ));
+//    }
+//
+//    @ExceptionHandler(OrganizerNotFound.class)
+//    public ResponseEntity<Map<String, Object>> handleOrganizerNotFound(
+//            OrganizerNotFound ex,
+//            HttpServletRequest request) {
+//
+//        return ResponseEntity
+//                .status(HttpStatus.NOT_FOUND)
+//                .body(buildError(
+//                        HttpStatus.NOT_FOUND,
+//                        ex.getMessage(),
+//                        request.getRequestURI()
+//                ));
+//    }
+//
+//    @ExceptionHandler(PromotionCodeAlreadyExistsException.class)
+//    public ResponseEntity<Map<String, Object>> handlePromotionCodeExists(
+//            PromotionCodeAlreadyExistsException ex,
+//            HttpServletRequest request) {
+//
+//        return ResponseEntity
+//                .status(HttpStatus.CONFLICT)
+//                .body(buildError(
+//                        HttpStatus.CONFLICT,
+//                        ex.getMessage(),
+//                        request.getRequestURI()
+//                ));
+//    }
+//
+//    @ExceptionHandler(InvalidUserTypeException.class)
+//    public ResponseEntity<Map<String, Object>> handleInvalidUserType(
+//            InvalidUserTypeException ex,
+//            HttpServletRequest request) {
+//
+//        return ResponseEntity
+//                .status(HttpStatus.BAD_REQUEST)
+//                .body(buildError(
+//                        HttpStatus.BAD_REQUEST,
+//                        ex.getMessage(),
+//                        request.getRequestURI()
+//                ));
+//    }
+
 }

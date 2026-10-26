@@ -1,6 +1,5 @@
 package com.eventpro.api.model;
 
-import com.eventpro.api.model.Organizer;
 import com.eventpro.api.model.enums.EventStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -43,11 +42,14 @@ public class Event {
     @Column(name = "sales_closing_date", nullable = false)
     private LocalDateTime salesClosingDate;
 
+    @Column(nullable = false)
+    private Integer capacity;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private EventStatus status = EventStatus.DRAFT;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "organizer_id", nullable = false)
     private Organizer organizer;
 
@@ -59,6 +61,11 @@ public class Event {
     private List<TicketCategoriesPerEvent> ticketCategories =
             new ArrayList<>();
 
-    @OneToMany(mappedBy = "event", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
     private List<Promotion> promotions = new ArrayList<>();
+
+    public void addTicketCategory(TicketCategoriesPerEvent category) {
+        ticketCategories.add(category);
+        category.setEvent(this);
+    }
 }

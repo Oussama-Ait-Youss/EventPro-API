@@ -15,7 +15,10 @@ import java.util.List;
         uniqueConstraints = {
                 @UniqueConstraint(
                         name = "uk_event_ticket_category",
-                        columnNames = {"event_id", "ticket_category_id"}
+                        columnNames = {
+                                "event_id",
+                                "ticket_category_id"
+                        }
                 )
         }
 )
@@ -36,6 +39,9 @@ public class TicketCategoriesPerEvent {
     @JoinColumn(name = "ticket_category_id", nullable = false)
     private TicketCategory ticketCategory;
 
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
+
     @Column(name = "unit_price", nullable = false, precision = 12, scale = 2)
     private BigDecimal unitPrice;
 
@@ -51,10 +57,16 @@ public class TicketCategoriesPerEvent {
     @Column(name = "max_quota_per_client", nullable = false)
     private Integer maxQuotaPerClient;
 
-    @OneToMany(mappedBy = "ticketCategoryPerEvent", fetch = FetchType.LAZY)
+    @OneToMany(
+            mappedBy = "ticketCategoryPerEvent",
+            fetch = FetchType.LAZY
+    )
     private List<ReservationLine> reservationLines = new ArrayList<>();
 
-    @OneToMany(mappedBy = "ticketCategoryPerEvent", fetch = FetchType.LAZY)
+    @OneToMany(
+            mappedBy = "ticketCategoryPerEvent",
+            fetch = FetchType.LAZY
+    )
     private List<Ticket> tickets = new ArrayList<>();
 
     public int getAvailableQuantity() {

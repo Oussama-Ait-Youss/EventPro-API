@@ -3,6 +3,7 @@ package com.eventpro.api.controller;
 
 import com.eventpro.api.dto.user.UserRegistrationRequest;
 import com.eventpro.api.dto.user.UserResponse;
+import com.eventpro.api.dto.user.UserUpdateRequest;
 import com.eventpro.api.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,4 +34,15 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
+
+
+    @PutMapping("/{userId}")
+    public ResponseEntity<UserResponse> updateUser(
+            @PathVariable Long userId,
+            @Valid @RequestBody UserUpdateRequest request) {
+
+        return ResponseEntity.ok(
+                userService.updateUser(userId, request)
+        );
+    }
 }

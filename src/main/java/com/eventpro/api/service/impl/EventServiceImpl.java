@@ -4,6 +4,8 @@ import com.eventpro.api.dto.event.EventCreateRequest;
 import com.eventpro.api.dto.event.EventResponse;
 import com.eventpro.api.dto.event.EventTicketCategoryRequest;
 
+import com.eventpro.api.dto.event.EventUpdateRequest;
+import com.eventpro.api.exception.EventNotFoundException;
 import com.eventpro.api.model.Event;
 import com.eventpro.api.model.Organizer;
 import com.eventpro.api.model.TicketCategory;
@@ -166,6 +168,69 @@ public class EventServiceImpl implements EventService {
                 .stream()
                 .map(eventMapper::toResponse)
                 .toList();
+    }
+
+    @Override
+    @Transactional
+    public EventResponse updateEvent(
+            Long organizerId,
+            Long eventId,
+            EventUpdateRequest request) {
+
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() ->
+                        new EventNotFoundException("Event not found")
+                );
+
+        // Check ownership
+        if (!event.getOrganizer().getId().equals(organizerId)) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "This event does not belong to the organizer"
+            );
+        }
+
+        // Validate event dates
+        if (!request.getEndDate().isAfter(request.getStartDate())) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Event end date must be after start date"
+            );
+        }
+
+        if (!request.getSalesEndDate().isAfter(request.getSalesStartDate())) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Sales end date must be after sales start date"
+            );
+        }
+
+        if (request.getSalesEndDate().isAfter(request.getStartDate())) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Ticket sales must close before the event starts"
+            );
+        }
+
+        // Preserve category capacity constraints
+        int totalCategoryQuantity = event.getTicketCategories()
+                .stream()
+                .mapToInt(category -> category.getTotalQuantity())
+                .sum();
+
+        if (request.getCapacity() < totalCategoryQuantity) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Event capacity cannot be smaller than total ticket category quantities"
+            );
+        }
+
+        // Update existing entity
+        eventMapper.updateEntityFromDto(request, event);
+
+        Event updatedEvent = eventRepository.save(event);
+
+        return eventMapper.toResponse(updatedEvent);
     }
 
     private void validateTicketCategories(EventCreateRequest request) {

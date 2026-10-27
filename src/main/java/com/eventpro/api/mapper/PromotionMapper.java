@@ -2,9 +2,11 @@ package com.eventpro.api.mapper;
 
 import com.eventpro.api.dto.promotion.PromotionCreateRequest;
 import com.eventpro.api.dto.promotion.PromotionResponse;
+import com.eventpro.api.dto.promotion.PromotionUpdateRequest;
 import com.eventpro.api.model.Promotion;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface PromotionMapper {
@@ -15,6 +17,10 @@ public interface PromotionMapper {
     @Mapping(target = "organizer", ignore = true)
     @Mapping(target = "usageCount", ignore = true)
     @Mapping(target = "reservations", ignore = true)
+    void updateEntityFromDto(
+            PromotionUpdateRequest request,
+            @MappingTarget Promotion promotion
+    );
     Promotion toEntity(PromotionCreateRequest request);
 
     // Entity -> Response DTO

@@ -3,8 +3,10 @@ package com.eventpro.api.service.impl;
 import com.eventpro.api.dto.event.EventCreateRequest;
 import com.eventpro.api.dto.promotion.PromotionCreateRequest;
 import com.eventpro.api.dto.promotion.PromotionResponse;
+import com.eventpro.api.dto.promotion.PromotionUpdateRequest;
 import com.eventpro.api.exception.EventNotFoundException;
 import com.eventpro.api.exception.OrganizerNotFound;
+import com.eventpro.api.exception.PromotionCodeAlreadyExistsException;
 import com.eventpro.api.mapper.EventMapper;
 import com.eventpro.api.mapper.PromotionMapper;
 import com.eventpro.api.model.Event;
@@ -57,6 +59,92 @@ public class PromotionServiceImpl implements PromotionService {
                 .stream()
                 .map(promotionMapper::toResponse)
                 .toList();
+    }
+
+    @Override
+    @Transactional
+    public PromotionResponse updatePromotion(
+            Long organizerId,
+            Long eventId,
+            Long promotionId,
+            PromotionUpdateRequest request) {
+
+        Promotion promotion = promotionRepository.findById(promotionId)
+                .orElseThrow(() ->
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "Promotion not found"
+                        )
+                );
+
+        // Verify ownership and event association
+        if (!promotion.getOrganizer().getId().equals(organizerId)
+                || !promotion.getEvent().getId().equals(eventId)) {
+
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "This promotion does not belong to the specified organizer and event"
+            );
+        }
+
+        String normalizedCode = request.getCode()
+                .trim()
+                .toUpperCase(Locale.ROOT);
+
+        // Check code uniqueness, excluding current promotion
+        if (promotionRepository.existsByCodeIgnoreCaseAndIdNot(
+                normalizedCode, promotionId)) {
+
+            throw new PromotionCodeAlreadyExistsException(
+                    "Promotion code already exists: " + normalizedCode
+            );
+        }
+
+        // Validate dates
+        if (!request.getEndDate().isAfter(request.getStartDate())) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Promotion end date must be after start date"
+            );
+        }
+
+        Event event = promotion.getEvent();
+
+        if (request.getStartDate().isBefore(event.getSalesOpeningDate())
+                || request.getEndDate().isAfter(event.getSalesClosingDate())) {
+
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Promotion dates must be within the ticket sales period"
+            );
+        }
+
+        // Validate discount
+        if (request.getDiscountType() == DiscountType.PERCENTAGE
+                && request.getDiscountValue()
+                .compareTo(BigDecimal.valueOf(100)) > 0) {
+
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Percentage discount cannot exceed 100%"
+            );
+        }
+
+        // Usage limit cannot be lower than current usage
+        if (request.getUsageLimit() < promotion.getUsageCount()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Usage limit cannot be lower than the current usage count"
+            );
+        }
+
+        // Update existing promotion
+        promotionMapper.updateEntityFromDto(request, promotion);
+        promotion.setCode(normalizedCode);
+
+        Promotion updatedPromotion = promotionRepository.save(promotion);
+
+        return promotionMapper.toResponse(updatedPromotion);
     }
 
 

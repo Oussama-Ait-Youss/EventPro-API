@@ -45,4 +45,14 @@ public class UserController {
                 userService.updateUser(userId, request)
         );
     }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<UserResponse> deleteUser( @PathVariable Long userId){
+        return ResponseEntity.ok(userService.deleteUser(userId));
+    }
+
+    @PatchMapping("/{userId}")
+    public ResponseEntity<UserResponse> restoreUser( @PathVariable Long userId){
+        return ResponseEntity.ok(userService.restoreUser(userId));
+    }
 }

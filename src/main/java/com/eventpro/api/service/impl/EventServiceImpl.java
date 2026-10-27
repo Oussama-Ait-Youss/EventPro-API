@@ -1,5 +1,6 @@
 package com.eventpro.api.service.impl;
 
+import com.eventpro.api.aop.annotation.Auditable;
 import com.eventpro.api.dto.event.EventCreateRequest;
 import com.eventpro.api.dto.event.EventResponse;
 import com.eventpro.api.dto.event.EventTicketCategoryRequest;
@@ -52,11 +53,10 @@ public class EventServiceImpl implements EventService {
         this.eventMapper = eventMapper;
     }
 
+    @Auditable(action = "CREATE", resource = "EVENT")
     @Override
     @Transactional
-    public EventResponse createEvent(
-            Long organizerId,
-            EventCreateRequest request) {
+    public EventResponse createEvent(Long organizerId,EventCreateRequest request) {
 
         // 1. Validate dates
         validateDates(request);
@@ -161,6 +161,8 @@ public class EventServiceImpl implements EventService {
             );
         }
     }
+
+
     @Override
     @Transactional
     public List<EventResponse> getAllEvents() {
@@ -170,6 +172,9 @@ public class EventServiceImpl implements EventService {
                 .toList();
     }
 
+
+
+    @Auditable(action = "UPDATE", resource = "EVENT")
     @Override
     @Transactional
     public EventResponse updateEvent(

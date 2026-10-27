@@ -2,6 +2,7 @@ package com.eventpro.api.controller;
 
 import com.eventpro.api.dto.promotion.PromotionCreateRequest;
 import com.eventpro.api.dto.promotion.PromotionResponse;
+import com.eventpro.api.dto.promotion.PromotionUpdateRequest;
 import com.eventpro.api.service.PromotionService;
 
 import jakarta.validation.Valid;
@@ -43,5 +44,22 @@ public class PromotionController {
     @GetMapping
     public ResponseEntity<List<PromotionResponse>> getAllPromotions() {
         return ResponseEntity.ok(promotionService.getAllPromotions());
+    }
+
+    @PutMapping("/organizers/{organizerId}/events/{eventId}/{promotionId}")
+    public ResponseEntity<PromotionResponse> updatePromotion(
+            @PathVariable Long organizerId,
+            @PathVariable Long eventId,
+            @PathVariable Long promotionId,
+            @Valid @RequestBody PromotionUpdateRequest request) {
+
+        return ResponseEntity.ok(
+                promotionService.updatePromotion(
+                        organizerId,
+                        eventId,
+                        promotionId,
+                        request
+                )
+        );
     }
 }

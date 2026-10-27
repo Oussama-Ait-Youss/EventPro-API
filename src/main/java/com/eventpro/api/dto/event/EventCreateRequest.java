@@ -41,6 +41,5 @@ public class EventCreateRequest {
     @NotNull
     private EventStatus status;
 
-    @NotEmpty(message = "At least one ticket category is required")
-    private List<@NotNull @Valid EventTicketCategoryRequest> ticketCategories;
+
 }

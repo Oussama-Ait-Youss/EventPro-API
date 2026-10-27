@@ -33,6 +33,7 @@ public interface UserMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "active", constant = "true")
     @Mapping(target = "role", source = "userType")
+
     AgentConrol toAgentControl(UserRegistrationRequest request);
 
 

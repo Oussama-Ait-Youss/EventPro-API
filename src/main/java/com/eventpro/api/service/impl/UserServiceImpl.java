@@ -2,6 +2,7 @@ package com.eventpro.api.service.impl;
 
 import com.eventpro.api.dto.user.UserRegistrationRequest;
 import com.eventpro.api.dto.user.UserResponse;
+import com.eventpro.api.dto.user.UserUpdateRequest;
 import com.eventpro.api.exception.EmailAlreadyExistsException;
 import com.eventpro.api.mapper.UserMapper;
 import com.eventpro.api.model.*;
@@ -9,7 +10,9 @@ import com.eventpro.api.repository.UserRepository;
 import com.eventpro.api.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -49,5 +52,36 @@ public class UserServiceImpl implements UserService {
                 .stream()
                 .map(userMapper::toResponse)
                 .toList();
+    }
+
+    @Override
+    @Transactional
+    public UserResponse updateUser(
+            Long userId,
+            UserUpdateRequest request) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() ->
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "User not found"
+                        )
+                );
+
+        // Check whether another user already uses the email
+        if (!user.getEmail().equalsIgnoreCase(request.getEmail())
+                && userRepository.existsByEmailIgnoreCase(request.getEmail())) {
+
+            throw new EmailAlreadyExistsException(
+                    "Email already exists"
+            );
+        }
+
+        user.setName(request.getNom());
+        user.setEmail(request.getEmail());
+
+        User updatedUser = userRepository.save(user);
+
+        return userMapper.toResponse(updatedUser);
     }
 }

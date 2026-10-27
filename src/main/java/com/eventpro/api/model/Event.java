@@ -47,7 +47,7 @@ public class Event {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private EventStatus status = EventStatus.DRAFT;
+    private EventStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "organizer_id", nullable = false)

@@ -18,7 +18,6 @@ public interface EventMapper {
     // CREATE EVENT
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "organizer", ignore = true)
-    @Mapping(target = "status", ignore = true)
     @Mapping(target = "ticketCategories", ignore = true)
     @Mapping(target = "promotion", ignore = true)
     @Mapping(target = "salesOpeningDate", source = "salesStartDate")
@@ -36,7 +35,6 @@ public interface EventMapper {
     // UPDATE EVENT
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "organizer", ignore = true)
-    @Mapping(target = "status", ignore = true)
     @Mapping(target = "ticketCategories", ignore = true)
     @Mapping(target = "promotion", ignore = true)
     @Mapping(target = "salesOpeningDate", source = "salesStartDate")

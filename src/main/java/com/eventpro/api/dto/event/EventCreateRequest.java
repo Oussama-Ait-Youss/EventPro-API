@@ -1,5 +1,6 @@
 package com.eventpro.api.dto.event;
 
+import com.eventpro.api.model.enums.EventStatus;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -36,6 +37,9 @@ public class EventCreateRequest {
     @NotNull(message = "Capacity is required")
     @Positive(message = "Capacity must be greater than zero")
     private Integer capacity;
+
+    @NotNull
+    private EventStatus status;
 
     @NotEmpty(message = "At least one ticket category is required")
     private List<@NotNull @Valid EventTicketCategoryRequest> ticketCategories;

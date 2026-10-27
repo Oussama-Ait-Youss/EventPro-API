@@ -76,7 +76,7 @@ public class EventServiceImpl implements EventService {
 
         // 5. Set server-managed fields
         event.setOrganizer(organizer);
-        event.setStatus(EventStatus.DRAFT);
+        event.setStatus(request.getStatus());
 
         // 6. Build category associations
         for (EventTicketCategoryRequest categoryRequest

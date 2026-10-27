@@ -1,5 +1,6 @@
 package com.eventpro.api.dto.event;
 
+import com.eventpro.api.model.enums.EventStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -31,6 +32,10 @@ public class EventUpdateRequest {
 
     @NotNull(message = "Sales end date is required")
     private LocalDateTime salesEndDate;
+
+
+    @NotNull
+    private EventStatus status;
 
     @NotNull(message = "Capacity is required")
     @Positive(message = "Capacity must be positive")

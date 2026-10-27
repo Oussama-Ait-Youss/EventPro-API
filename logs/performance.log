@@ -184,3 +184,30 @@
 2026-10-27 15:28:19.658 INFO  [http-nio-8080-exec-8] PERFORMANCE_LOG - layer=REPOSITORY method=CrudRepository.findById(..) durationMs=5.77 status=SUCCESS
 2026-10-27 15:28:19.664 INFO  [http-nio-8080-exec-8] PERFORMANCE_LOG - layer=REPOSITORY method=CrudRepository.save(..) durationMs=0.63 status=SUCCESS
 2026-10-27 15:28:19.675 INFO  [http-nio-8080-exec-8] PERFORMANCE_LOG - layer=SERVICE method=EventServiceImpl.updateEvent(..) durationMs=21.49 status=SUCCESS
+2026-10-27 15:42:45.675 WARN  [http-nio-8080-exec-8] PERFORMANCE_LOG - layer=REPOSITORY method=UserRepository.existsByEmail(..) durationMs=1229.58 status=SLOW outcome=SUCCESS
+2026-10-27 15:42:45.818 INFO  [http-nio-8080-exec-8] PERFORMANCE_LOG - layer=REPOSITORY method=CrudRepository.save(..) durationMs=140.55 status=SUCCESS
+2026-10-27 15:42:45.818 WARN  [http-nio-8080-exec-8] PERFORMANCE_LOG - layer=SERVICE method=UserServiceImpl.register(..) durationMs=1380.58 status=SLOW outcome=SUCCESS
+2026-10-27 15:42:51.891 INFO  [http-nio-8080-exec-5] PERFORMANCE_LOG - layer=REPOSITORY method=ListCrudRepository.findAll() durationMs=81.25 status=SUCCESS
+2026-10-27 15:42:51.893 INFO  [http-nio-8080-exec-5] PERFORMANCE_LOG - layer=SERVICE method=UserServiceImpl.getAllUsers() durationMs=83.48 status=SUCCESS
+2026-10-27 15:43:07.041 INFO  [http-nio-8080-exec-9] PERFORMANCE_LOG - layer=REPOSITORY method=CrudRepository.findById(..) durationMs=18.28 status=SUCCESS
+2026-10-27 15:43:07.098 INFO  [http-nio-8080-exec-9] PERFORMANCE_LOG - layer=REPOSITORY method=TicketCategoryRepository.findByNameIgnoreCase(..) durationMs=60.29 status=SUCCESS
+2026-10-27 15:43:07.111 INFO  [http-nio-8080-exec-9] PERFORMANCE_LOG - layer=REPOSITORY method=CrudRepository.save(..) durationMs=6.64 status=SUCCESS
+2026-10-27 15:43:07.111 INFO  [http-nio-8080-exec-9] PERFORMANCE_LOG - layer=REPOSITORY method=TicketCategoryRepository.findByNameIgnoreCase(..) durationMs=4.63 status=SUCCESS
+2026-10-27 15:43:07.119 INFO  [http-nio-8080-exec-9] PERFORMANCE_LOG - layer=REPOSITORY method=CrudRepository.save(..) durationMs=2.98 status=SUCCESS
+2026-10-27 15:43:07.119 INFO  [http-nio-8080-exec-9] PERFORMANCE_LOG - layer=REPOSITORY method=TicketCategoryRepository.findByNameIgnoreCase(..) durationMs=3.67 status=SUCCESS
+2026-10-27 15:43:07.127 INFO  [http-nio-8080-exec-9] PERFORMANCE_LOG - layer=REPOSITORY method=CrudRepository.save(..) durationMs=3.87 status=SUCCESS
+2026-10-27 15:43:07.158 INFO  [http-nio-8080-exec-9] PERFORMANCE_LOG - layer=REPOSITORY method=CrudRepository.save(..) durationMs=29.23 status=SUCCESS
+2026-10-27 15:43:07.159 INFO  [http-nio-8080-exec-9] PERFORMANCE_LOG - layer=SERVICE method=EventServiceImpl.createEvent(..) durationMs=137.13 status=SUCCESS
+2026-10-27 15:43:11.623 INFO  [http-nio-8080-exec-1] PERFORMANCE_LOG - layer=REPOSITORY method=ListCrudRepository.findAll() durationMs=29.70 status=SUCCESS
+2026-10-27 15:43:11.644 INFO  [http-nio-8080-exec-1] PERFORMANCE_LOG - layer=SERVICE method=EventServiceImpl.getAllEvents() durationMs=51.38 status=SUCCESS
+2026-10-27 15:43:20.864 INFO  [http-nio-8080-exec-2] PERFORMANCE_LOG - layer=REPOSITORY method=CrudRepository.findById(..) durationMs=5.92 status=SUCCESS
+2026-10-27 15:43:20.872 INFO  [http-nio-8080-exec-2] PERFORMANCE_LOG - layer=REPOSITORY method=TicketCategoryRepository.findByNameIgnoreCase(..) durationMs=5.30 status=SUCCESS
+2026-10-27 15:43:20.878 INFO  [http-nio-8080-exec-2] PERFORMANCE_LOG - layer=REPOSITORY method=TicketCategoryRepository.findByNameIgnoreCase(..) durationMs=5.87 status=SUCCESS
+2026-10-27 15:43:20.898 INFO  [http-nio-8080-exec-2] PERFORMANCE_LOG - layer=REPOSITORY method=TicketCategoryRepository.findByNameIgnoreCase(..) durationMs=27.09 status=SUCCESS
+2026-10-27 15:43:20.926 INFO  [http-nio-8080-exec-2] PERFORMANCE_LOG - layer=REPOSITORY method=CrudRepository.save(..) durationMs=18.87 status=SUCCESS
+2026-10-27 15:43:20.926 INFO  [http-nio-8080-exec-2] PERFORMANCE_LOG - layer=SERVICE method=EventServiceImpl.createEvent(..) durationMs=65.79 status=SUCCESS
+2026-10-27 15:43:25.238 INFO  [http-nio-8080-exec-7] PERFORMANCE_LOG - layer=REPOSITORY method=ListCrudRepository.findAll() durationMs=16.52 status=SUCCESS
+2026-10-27 15:43:25.263 INFO  [http-nio-8080-exec-7] PERFORMANCE_LOG - layer=SERVICE method=EventServiceImpl.getAllEvents() durationMs=41.88 status=SUCCESS
+2026-10-27 15:44:06.357 INFO  [http-nio-8080-exec-4] PERFORMANCE_LOG - layer=REPOSITORY method=CrudRepository.findById(..) durationMs=7.34 status=SUCCESS
+2026-10-27 15:44:06.369 INFO  [http-nio-8080-exec-4] PERFORMANCE_LOG - layer=REPOSITORY method=CrudRepository.save(..) durationMs=5.75 status=SUCCESS
+2026-10-27 15:44:06.379 INFO  [http-nio-8080-exec-4] PERFORMANCE_LOG - layer=SERVICE method=EventServiceImpl.updateEvent(..) durationMs=33.77 status=SUCCESS

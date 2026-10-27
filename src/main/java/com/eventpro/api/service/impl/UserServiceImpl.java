@@ -5,12 +5,14 @@ import com.eventpro.api.dto.user.UserRegistrationRequest;
 import com.eventpro.api.dto.user.UserResponse;
 import com.eventpro.api.dto.user.UserUpdateRequest;
 import com.eventpro.api.exception.EmailAlreadyExistsException;
+import com.eventpro.api.exception.UserNotFoundException;
 import com.eventpro.api.mapper.UserMapper;
 import com.eventpro.api.model.*;
 import com.eventpro.api.repository.UserRepository;
 import com.eventpro.api.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.sql.ast.tree.expression.Over;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -53,8 +55,32 @@ public class UserServiceImpl implements UserService {
     public List<UserResponse> getAllUsers() {
         return userRepository.findAll()
                 .stream()
+                .filter(c->c.isActive() == true)
                 .map(userMapper::toResponse)
                 .toList();
+    }
+
+
+    @Override
+    @Transactional
+    public UserResponse restoreUser(Long userId){
+        User user = userRepository.findById(userId).orElseThrow(()-> new UserNotFoundException("user not found"));
+
+        //change the activity
+        user.setActive(true);
+
+        return userMapper.toResponse(user);
+    }
+    @Override
+    @Transactional
+    public UserResponse deleteUser(Long userId){
+        // fint the user
+        User user = userRepository.findById(userId).orElseThrow(()-> new UserNotFoundException("user not found"));
+
+        //change the activity
+        user.setActive(false);
+
+        return userMapper.toResponse(user);
     }
 
     @Auditable(action = "UPDATE", resource = "USER")

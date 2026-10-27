@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+    <!-- Log directory -->
+    <property name="LOG_PATH" value="logs"/>
+
+    <!-- Log format -->
+    <property
+            name="LOG_PATTERN"
+            value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger - %msg%n"
+    />
+
+    <!-- ================================= -->
+    <!-- AUDIT FILE -->
+    <!-- ================================= -->
+
+    <appender
+            name="AUDIT_FILE"
+            class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+        <file>${LOG_PATH}/audit.log</file>
+
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+
+            <fileNamePattern>
+                ${LOG_PATH}/archive/audit.%d{yyyy-MM-dd}.%i.log.gz
+            </fileNamePattern>
+
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>500MB</totalSizeCap>
+
+        </rollingPolicy>
+
+    </appender>
+
+    <!-- ================================= -->
+    <!-- PERFORMANCE FILE -->
+    <!-- ================================= -->
+
+    <appender
+            name="PERFORMANCE_FILE"
+            class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+        <file>${LOG_PATH}/performance.log</file>
+
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+
+            <fileNamePattern>
+                ${LOG_PATH}/archive/performance.%d{yyyy-MM-dd}.%i.log.gz
+            </fileNamePattern>
+
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>500MB</totalSizeCap>
+
+        </rollingPolicy>
+
+    </appender>
+
+    <!-- ================================= -->
+    <!-- AUDIT LOGGER -->
+    <!-- ================================= -->
+
+    <logger
+            name="AUDIT_LOG"
+            level="INFO"
+            additivity="false">
+
+        <appender-ref ref="AUDIT_FILE"/>
+
+    </logger>
+
+    <!-- ================================= -->
+    <!-- PERFORMANCE LOGGER -->
+    <!-- ================================= -->
+
+    <logger
+            name="PERFORMANCE_LOG"
+            level="INFO"
+            additivity="false">
+
+        <appender-ref ref="PERFORMANCE_FILE"/>
+
+    </logger>
+
+    <!-- ================================= -->
+    <!-- CONSOLE LOGGER -->
+    <!-- ================================= -->
+
+    <appender
+            name="CONSOLE"
+            class="ch.qos.logback.core.ConsoleAppender">
+
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+
+    </appender>
+
+    <!-- Default application logs -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</configuration>

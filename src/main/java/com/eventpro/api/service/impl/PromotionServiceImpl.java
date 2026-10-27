@@ -1,5 +1,6 @@
 package com.eventpro.api.service.impl;
 
+import com.eventpro.api.aop.annotation.Auditable;
 import com.eventpro.api.dto.event.EventCreateRequest;
 import com.eventpro.api.dto.promotion.PromotionCreateRequest;
 import com.eventpro.api.dto.promotion.PromotionResponse;
@@ -61,6 +62,10 @@ public class PromotionServiceImpl implements PromotionService {
                 .toList();
     }
 
+
+
+
+    @Auditable(action = "UPDATE", resource = "PROMOTION")
     @Override
     @Transactional
     public PromotionResponse updatePromotion(
@@ -148,6 +153,8 @@ public class PromotionServiceImpl implements PromotionService {
     }
 
 
+
+    @Auditable(action = "CREATE", resource = "PROMOTION")
     @Override
     public PromotionResponse createPromotion(Long organizerId, Long eventId, PromotionCreateRequest request) {
 

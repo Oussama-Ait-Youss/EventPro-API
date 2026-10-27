@@ -1,5 +1,6 @@
 package com.eventpro.api.service.impl;
 
+import com.eventpro.api.aop.annotation.Auditable;
 import com.eventpro.api.dto.user.UserRegistrationRequest;
 import com.eventpro.api.dto.user.UserResponse;
 import com.eventpro.api.dto.user.UserUpdateRequest;
@@ -27,6 +28,7 @@ public class UserServiceImpl implements UserService {
 
 
 
+    @Auditable(action = "CREATE", resource = "USER")
     @Override
     @Transactional
     public UserResponse register(UserRegistrationRequest request) {
@@ -45,6 +47,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.toResponse(savedUser);
     }
 
+
     @Override
     @Transactional
     public List<UserResponse> getAllUsers() {
@@ -54,11 +57,10 @@ public class UserServiceImpl implements UserService {
                 .toList();
     }
 
+    @Auditable(action = "UPDATE", resource = "USER")
     @Override
     @Transactional
-    public UserResponse updateUser(
-            Long userId,
-            UserUpdateRequest request) {
+    public UserResponse updateUser(Long userId, UserUpdateRequest request) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() ->

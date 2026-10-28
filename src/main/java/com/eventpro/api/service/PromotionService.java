@@ -16,4 +16,8 @@ public interface PromotionService {
             PromotionUpdateRequest request
     );
 
+    List<PromotionResponse> getAllActivePromotions();
+
+    void deletePromotion(Long organizerId, Long promotionId);
+
 }

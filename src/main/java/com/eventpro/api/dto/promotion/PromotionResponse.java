@@ -1,6 +1,7 @@
 package com.eventpro.api.dto.promotion;
 
 import com.eventpro.api.model.enums.DiscountType;
+import com.eventpro.api.model.enums.PromotionStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,6 +27,9 @@ public class PromotionResponse {
         private LocalDateTime startDate;
 
         private LocalDateTime endDate;
+
+
+        private PromotionStatus status;
 
         private Integer usageLimit;
 

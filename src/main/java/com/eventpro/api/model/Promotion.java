@@ -1,6 +1,7 @@
 package com.eventpro.api.model;
 
 import com.eventpro.api.model.enums.DiscountType;
+import com.eventpro.api.model.enums.PromotionStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -53,8 +54,13 @@ public class Promotion {
     @Column(name = "usage_count", nullable = false)
     private Integer usageCount = 0;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private PromotionStatus status = PromotionStatus.ACTIVE;
+
     @OneToMany(mappedBy = "promotion", fetch = FetchType.LAZY)
     private List<Reservation> reservations = new ArrayList<>();
+
 
     public boolean isValid() {
         LocalDateTime now = LocalDateTime.now();

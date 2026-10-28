@@ -58,8 +58,7 @@ public class Event {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<TicketCategoriesPerEvent> ticketCategories =
-            new ArrayList<>();
+    private List<TicketCategoriesPerEvent> ticketCategories = new ArrayList<>();
 
     @OneToOne(mappedBy = "event", fetch = FetchType.LAZY)
     private Promotion promotion;

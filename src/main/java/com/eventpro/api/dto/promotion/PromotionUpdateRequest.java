@@ -1,6 +1,7 @@
 package com.eventpro.api.dto.promotion;
 
 import com.eventpro.api.model.enums.DiscountType;
+import com.eventpro.api.model.enums.PromotionStatus;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -34,6 +35,9 @@ public class PromotionUpdateRequest {
 
     @NotNull(message = "End date is required")
     private LocalDateTime endDate;
+
+    @NotNull(message = "Promotion status is required")
+    private PromotionStatus status;
 
     @NotNull(message = "Usage limit is required")
     @Positive(message = "Usage limit must be greater than 0")

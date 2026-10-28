@@ -41,9 +41,23 @@ public class PromotionController {
                 .body(response);
     }
 
-    @GetMapping
-    public ResponseEntity<List<PromotionResponse>> getAllPromotions() {
-        return ResponseEntity.ok(promotionService.getAllPromotions());
+//    @GetMapping
+//    public ResponseEntity<List<PromotionResponse>> getAllPromotions() {
+//        return ResponseEntity.ok(promotionService.getAllPromotions());
+//    }
+
+    @DeleteMapping("/{promotionId}/{organizerId}")
+    public ResponseEntity<Void> deletePromotion(
+            @RequestParam Long organizerId,
+            @PathVariable Long promotionId
+    ) {
+
+        promotionService.deletePromotion(
+                organizerId,
+                promotionId
+        );
+
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/organizers/{organizerId}/events/{eventId}/{promotionId}")
@@ -61,5 +75,14 @@ public class PromotionController {
                         request
                 )
         );
+    }
+
+    @GetMapping
+    public ResponseEntity<List<PromotionResponse>> getAllActivePromotions() {
+
+        List<PromotionResponse> promotions =
+                promotionService.getAllActivePromotions();
+
+        return ResponseEntity.ok(promotions);
     }
 }

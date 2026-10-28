@@ -14,6 +14,7 @@ import com.eventpro.api.model.Event;
 import com.eventpro.api.model.Organizer;
 import com.eventpro.api.model.Promotion;
 import com.eventpro.api.model.enums.DiscountType;
+import com.eventpro.api.model.enums.PromotionStatus;
 import com.eventpro.api.repository.EventRepository;
 import com.eventpro.api.repository.OrganizerRepository;
 import com.eventpro.api.repository.PromotionRepository;
@@ -146,6 +147,7 @@ public class PromotionServiceImpl implements PromotionService {
         // Update existing promotion
         promotionMapper.updateEntityFromDto(request, promotion);
         promotion.setCode(normalizedCode);
+        promotion.setStatus(request.getStatus());
 
         Promotion updatedPromotion = promotionRepository.save(promotion);
 
@@ -205,6 +207,7 @@ public class PromotionServiceImpl implements PromotionService {
         Promotion promotion = promotionMapper.toEntity(request);
 
         // 10. Assign server-managed fields
+        promotion.setStatus(PromotionStatus.ACTIVE);
         promotion.setOrganizer(organizer);
         promotion.setEvent(event);
         promotion.setCode(promotionCode);
@@ -249,6 +252,59 @@ public class PromotionServiceImpl implements PromotionService {
                     "Promotion cannot end after ticket sales close"
             );
         }
+    }
+
+    @Auditable(action = "SELECT",resource = "PROMOTION")
+    @Override
+    @Transactional
+    public List<PromotionResponse> getAllActivePromotions() {
+
+        return promotionRepository
+                .findByStatus(PromotionStatus.ACTIVE)
+                .stream()
+                .map(promotionMapper::toResponse)
+                .toList();
+    }
+
+    @Auditable(action = "DELETE", resource = "PROMOTION")
+    @Override
+    @Transactional
+    public void deletePromotion(
+            Long organizerId,
+            Long promotionId
+    ) {
+
+        // 1. Find promotion
+        Promotion promotion = promotionRepository
+                .findById(promotionId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Promotion not found"
+                ));
+
+        // 2. Check organizer ownership
+        if (!promotion.getOrganizer().getId().equals(organizerId)) {
+
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "This promotion does not belong to the organizer"
+            );
+        }
+
+        // 3. Check whether promotion is already canceled
+        if (promotion.getStatus() == PromotionStatus.CANCELED) {
+
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Promotion is already canceled"
+            );
+        }
+
+        // 4. Soft delete
+        promotion.setStatus(PromotionStatus.CANCELED);
+
+        // 5. Save
+        promotionRepository.save(promotion);
     }
 
 

@@ -17,6 +17,7 @@ public interface PromotionMapper {
     @Mapping(target = "organizer", ignore = true)
     @Mapping(target = "usageCount", ignore = true)
     @Mapping(target = "reservations", ignore = true)
+    @Mapping(target = "status", ignore = true)
     void updateEntityFromDto(
             PromotionUpdateRequest request,
             @MappingTarget Promotion promotion

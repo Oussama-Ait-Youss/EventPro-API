@@ -9,4 +9,5 @@ public interface EventTicketCategoryService {
             Long eventId,
             EventTicketCategoryAssignRequest request
     );
+
 }

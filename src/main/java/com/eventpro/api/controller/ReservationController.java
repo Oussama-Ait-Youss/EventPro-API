@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/clients/{clientId}/reservations")
 @RequiredArgsConstructor
@@ -30,5 +32,34 @@ public class ReservationController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ReservationResponse>> getClientReservations(
+            @PathVariable Long clientId) {
+
+        return ResponseEntity.ok(
+                reservationService.getClientReservations(clientId)
+        );
+    }
+
+    @GetMapping("/{reservationId}")
+    public ResponseEntity<ReservationResponse> getReservation(
+            @PathVariable Long clientId,
+            @PathVariable Long reservationId) {
+
+        return ResponseEntity.ok(
+                reservationService.getReservation(clientId, reservationId)
+        );
+    }
+
+    @PatchMapping("/{reservationId}/cancel")
+    public ResponseEntity<ReservationResponse> cancelReservation(
+            @PathVariable Long clientId,
+            @PathVariable Long reservationId) {
+
+        return ResponseEntity.ok(
+                reservationService.cancelReservation(clientId, reservationId)
+        );
     }
 }

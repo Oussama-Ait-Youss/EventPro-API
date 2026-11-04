@@ -12,17 +12,17 @@ public interface ReservationService {
             ReservationCreateRequest request
     );
 
-//    ReservationResponse getReservation(
-//            Long clientId,
-//            Long reservationId
-//    );
-//
-//    List<ReservationResponse> getClientReservations(
-//            Long clientId
-//    );
-//
-//    ReservationResponse cancelReservation(
-//            Long clientId,
-//            Long reservationId
-//    );
+    ReservationResponse getReservation(
+            Long clientId,
+            Long reservationId
+    );
+
+    List<ReservationResponse> getClientReservations(
+            Long clientId
+    );
+
+    ReservationResponse cancelReservation(
+            Long clientId,
+            Long reservationId
+    );
 }

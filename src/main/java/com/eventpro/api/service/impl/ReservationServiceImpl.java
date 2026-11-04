@@ -342,4 +342,101 @@ public class ReservationServiceImpl implements ReservationService {
 
         return reservationMapper.toResponse(savedReservation);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ReservationResponse getReservation(
+            Long clientId,
+            Long reservationId) {
+
+        Reservation reservation = reservationRepository
+                .findById(reservationId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Reservation not found"
+                ));
+
+        if (!reservation.getClient().getId().equals(clientId)) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "This reservation does not belong to this client"
+            );
+        }
+
+        return reservationMapper.toResponse(reservation);
+    }
+    @Override
+    @Transactional(readOnly = true)
+    public List<ReservationResponse> getClientReservations(Long clientId) {
+
+        if (!clientRepository.existsById(clientId)) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Client not found"
+            );
+        }
+
+        return reservationRepository.findByClient_Id(clientId)
+                .stream()
+                .map(reservationMapper::toResponse)
+                .toList();
+    }
+    @Override
+    @Auditable(action = "CANCEL", resource = "RESERVATION")
+    @Transactional
+    public ReservationResponse cancelReservation(
+            Long clientId,
+            Long reservationId) {
+
+        Reservation reservation = reservationRepository
+                .findByIdForUpdate(reservationId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Reservation not found"
+                ));
+
+        if (!reservation.getClient().getId().equals(clientId)) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "Reservation does not belong to this client"
+            );
+        }
+
+        if (reservation.getStatus() != ReservationStatus.PENDING) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Only pending reservations can be cancelled directly"
+            );
+        }
+
+        releaseReservedTickets(reservation);
+
+        reservation.setStatus(ReservationStatus.CANCELLED);
+
+        return reservationMapper.toResponse(reservationRepository.save(reservation));
+    }
+
+    private void releaseReservedTickets(Reservation reservation) {
+
+        for (ReservationLine line : reservation.getLines()) {
+
+            TicketCategoriesPerEvent category =
+                    categoryRepository.findByIdForUpdate(
+                            line.getTicketCategoryPerEvent().getId()
+                    ).orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.NOT_FOUND,
+                            "Ticket category not found"
+                    ));
+
+            int reserved = category.getReservedQuantity() == null
+                    ? 0
+                    : category.getReservedQuantity();
+
+            int quantity = line.getQuantity();
+
+            category.setReservedQuantity(
+                    Math.max(0, reserved - quantity)
+            );
+        }
+    }
 }

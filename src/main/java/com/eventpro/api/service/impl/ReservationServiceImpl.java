@@ -415,6 +415,37 @@ public class ReservationServiceImpl implements ReservationService {
 
         return reservationMapper.toResponse(reservationRepository.save(reservation));
     }
+    @Override
+    @Transactional
+    public void expireReservation(Long reservationId) {
+
+        // 1. Find and lock the reservation
+        Reservation reservation = reservationRepository
+                .findByIdForUpdate(reservationId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Reservation not found"
+                ));
+
+        // 2. Check if the reservation is still pending
+        if (reservation.getStatus() != ReservationStatus.PENDING) {
+            return;
+        }
+
+        // 3. Check if the reservation has actually expired
+        if (reservation.getExpirationDate().isAfter(LocalDateTime.now())) {
+            return;
+        }
+
+        // 4. Release reserved ticket quantities
+        releaseReservedTickets(reservation);
+
+        // 5. Change reservation status
+        reservation.setStatus(ReservationStatus.EXPIRED);
+
+        // 6. Save changes
+        reservationRepository.save(reservation);
+    }
 
     private void releaseReservedTickets(Reservation reservation) {
 

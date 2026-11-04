@@ -25,4 +25,7 @@ public interface ReservationService {
             Long clientId,
             Long reservationId
     );
+    void expireReservation(Long reservationId);
+
+
 }

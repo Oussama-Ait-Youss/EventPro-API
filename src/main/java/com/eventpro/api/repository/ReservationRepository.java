@@ -39,4 +39,5 @@ public interface ReservationRepository
     Optional<Reservation> findByIdForUpdate(
             @Param("reservationId") Long reservationId
     );
+
 }

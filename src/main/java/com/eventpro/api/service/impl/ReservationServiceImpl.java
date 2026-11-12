@@ -22,6 +22,7 @@ import com.eventpro.api.repository.TicketCategoriesPerEventRepository;
 import com.eventpro.api.service.ReservationService;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -415,6 +416,8 @@ public class ReservationServiceImpl implements ReservationService {
 
         return reservationMapper.toResponse(reservationRepository.save(reservation));
     }
+
+    @Scheduled(fixedRate = 60000)
     @Override
     @Transactional
     public void expireReservation(Long reservationId) {

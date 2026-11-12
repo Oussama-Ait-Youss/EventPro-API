@@ -1,3 +1,4 @@
+
 package com.eventpro.api.dto.payment;
 
 import com.eventpro.api.model.enums.PaymentStatus;
@@ -14,14 +15,9 @@ import java.time.LocalDateTime;
 public class PaymentResponse {
 
     private Long id;
-
     private String reference;
-
     private Long reservationId;
-
     private BigDecimal amount;
-
-    private PaymentStatus status;
-
     private LocalDateTime paymentDate;
+    private PaymentStatus status;
 }

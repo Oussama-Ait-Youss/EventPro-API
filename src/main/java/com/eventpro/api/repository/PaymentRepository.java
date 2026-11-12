@@ -1,3 +1,4 @@
+
 package com.eventpro.api.repository;
 
 import com.eventpro.api.model.Payment;
@@ -17,7 +18,10 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
     List<Payment> findByReservation_Id(Long reservationId);
 
-    Optional<Payment> findByReference(String reference);
+    Optional<Payment> findFirstByReservation_IdAndStatusOrderByIdDesc(
+            Long reservationId,
+            PaymentStatus status
+    );
 
     boolean existsByReservation_IdAndStatus(
             Long reservationId,
@@ -25,12 +29,6 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     );
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("""
-        SELECT p
-        FROM Payment p
-        WHERE p.id = :paymentId
-    """)
-    Optional<Payment> findByIdForUpdate(
-            @Param("paymentId") Long paymentId
-    );
+    @Query("SELECT p FROM Payment p WHERE p.id = :id")
+    Optional<Payment> findByIdForUpdate(@Param("id") Long id);
 }

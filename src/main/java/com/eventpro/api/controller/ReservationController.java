@@ -4,6 +4,7 @@ import com.eventpro.api.dto.reservation.ReservationCreateRequest;
 import com.eventpro.api.dto.reservation.ReservationResponse;
 import com.eventpro.api.service.ReservationService;
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,4 +63,24 @@ public class ReservationController {
                 reservationService.cancelReservation(clientId, reservationId)
         );
     }
+
+
+    //==========================================================
+    //Mise en situation 1 : Requête JPQL, Exception & Controller
+    //==========================================================
+
+    @GetMapping("/{reservationId}")
+    public ResponseEntity<ReservationResponse> RechercheReservation(
+
+            @Valid @RequestParam String status,
+            @Valid @RequestParam String email,
+            @Valid @RequestParam String nomCategorie,
+            @Valid @RequestParam(defaultValue = "1") int quantiteMin
+    ) {
+
+        return ResponseEntity.ok(
+                reservationService.RechercheReservation(status,email,nomCategorie,quantiteMin);
+        );
+    }
+
 }

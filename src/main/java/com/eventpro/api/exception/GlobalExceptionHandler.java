@@ -220,61 +220,22 @@ public class GlobalExceptionHandler {
     }
 
 
-    //=========== promotion =================
-//    @ExceptionHandler(EventNotFoundException.class)
-//    public ResponseEntity<Map<String, Object>> handleEventNotFound(
-//            EventNotFoundException ex,
-//            HttpServletRequest request) {
-//
-//        return ResponseEntity
-//                .status(HttpStatus.NOT_FOUND)
-//                .body(buildError(
-//                        HttpStatus.NOT_FOUND,
-//                        ex.getMessage(),
-//                        request.getRequestURI()
-//                ));
-//    }
-//
-//    @ExceptionHandler(OrganizerNotFound.class)
-//    public ResponseEntity<Map<String, Object>> handleOrganizerNotFound(
-//            OrganizerNotFound ex,
-//            HttpServletRequest request) {
-//
-//        return ResponseEntity
-//                .status(HttpStatus.NOT_FOUND)
-//                .body(buildError(
-//                        HttpStatus.NOT_FOUND,
-//                        ex.getMessage(),
-//                        request.getRequestURI()
-//                ));
-//    }
-//
-//    @ExceptionHandler(PromotionCodeAlreadyExistsException.class)
-//    public ResponseEntity<Map<String, Object>> handlePromotionCodeExists(
-//            PromotionCodeAlreadyExistsException ex,
-//            HttpServletRequest request) {
-//
-//        return ResponseEntity
-//                .status(HttpStatus.CONFLICT)
-//                .body(buildError(
-//                        HttpStatus.CONFLICT,
-//                        ex.getMessage(),
-//                        request.getRequestURI()
-//                ));
-//    }
-//
-//    @ExceptionHandler(InvalidUserTypeException.class)
-//    public ResponseEntity<Map<String, Object>> handleInvalidUserType(
-//            InvalidUserTypeException ex,
-//            HttpServletRequest request) {
-//
-//        return ResponseEntity
-//                .status(HttpStatus.BAD_REQUEST)
-//                .body(buildError(
-//                        HttpStatus.BAD_REQUEST,
-//                        ex.getMessage(),
-//                        request.getRequestURI()
-//                ));
-//    }
+    //=============================================================
+    //Mise en situation 1 : Requête JPQL, Exception & Controller
+    //=============================================================
+
+    @ExceptionHandler(AucuneReservationTrouveeException.class)
+    public ResponseEntity<Map<String, Object>> AucunResevration(
+            AucuneReservationTrouveeException ex,
+            HttpServletRequest request) {
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(buildError(
+                        HttpStatus.NOT_FOUND,
+                        ex.getMessage(),
+                        request.getRequestURI()
+                ));
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.eventpro.api.repository;
 
+import com.eventpro.api.dto.reservation.ReservationResponse;
 import com.eventpro.api.model.Reservation;
 import com.eventpro.api.model.enums.ReservationStatus;
 
@@ -39,5 +40,28 @@ public interface ReservationRepository
     Optional<Reservation> findByIdForUpdate(
             @Param("reservationId") Long reservationId
     );
+
+    //===========================================================
+    //Mise en situation 1 : Requête JPQL, Exception & Controller
+    //===========================================================
+
+
+    @Query("""
+        SELECT r
+        FROM Reservation r
+        JOIN ReservationLine rl ON rl.reservation.id = r.id
+        JOIN TicketCategoriesPerEvent ticketCatperEvent ON rl.ticketCategoryPerEvent.id = ticketCatperEvent.id
+        JOIN TicketCategory ticket ON ticket.id = ticketCatperEvent.ticketCategory.id
+        JOIN Client c ON c.id = r.client.id
+        where r.status = :status AND c.email = :email AND ticket.name = :nomCategorie AND rl.quantity = :quantiteMin AND r.event.id = :eventId
+    """)
+    List<ReservationResponse> ReservationList(
+            @Param("status") String status,
+            @Param("email") String  email,
+            @Param("name") String nomcategorie,
+            @Param("quantity") int quantiteMin,
+            @Param("eventId") Long eventId
+    );
+
 
 }

@@ -28,6 +28,9 @@ public class ReservationResponse {
     private LocalDateTime expirationDate;
 
     private BigDecimal totalAmount;
+    private int quantiteMin;
+    private String nomCategorie;
+    private String email;
 
     private List<ReservationLineResponse> lines;
 }

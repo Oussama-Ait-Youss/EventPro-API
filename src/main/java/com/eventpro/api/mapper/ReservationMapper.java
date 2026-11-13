@@ -15,6 +15,8 @@ public interface ReservationMapper {
     // Reservation Entity -> ReservationResponse DTO
     @Mapping(target = "clientId", source = "client.id")
     @Mapping(target = "eventId", source = "event.id")
+    @Mapping(target = "quantiteMin", source = "ReservationLine.quantity")
+    @Mapping(target = "nomCategorie", source = "Ticketcategory.name")
     ReservationResponse toResponse(Reservation reservation);
 
     // ReservationLine Entity -> ReservationLineResponse DTO

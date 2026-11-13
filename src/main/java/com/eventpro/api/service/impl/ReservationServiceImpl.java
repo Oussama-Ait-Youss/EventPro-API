@@ -29,11 +29,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
@@ -472,5 +468,43 @@ public class ReservationServiceImpl implements ReservationService {
                     Math.max(0, reserved - quantity)
             );
         }
+    }
+
+
+
+    //===========================================================================
+    //Mise en situation 1 : Requête JPQL, Exception & Controller
+    //===========================================================================
+
+    @Override
+    @Transactional
+    public List<ReservationResponse> RechercheReservation(Long eventId,String status,String email,String nomCategorie,int quantityMin){
+
+
+        //check the event
+        // 3. Find the event.
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Event not found"
+                ));
+
+
+        //check le client by email
+        if (!clientRepository.existsByEmail(email)) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Client not found"
+            );
+        }
+
+
+        Optional<Client> client = clientRepository.findByEmail(email);
+
+
+        return reservationRepository.findByClient_Id(client.get().getId())
+                .stream()
+                .map(reservationMapper::toResponse)
+                .toList();
     }
 }

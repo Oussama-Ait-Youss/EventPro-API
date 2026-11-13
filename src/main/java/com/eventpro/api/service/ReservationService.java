@@ -28,4 +28,16 @@ public interface ReservationService {
     void expireReservation(Long reservationId);
 
 
+    //=========================================================================
+    //Mise en situation 1 : Requête JPQL, Exception & Controller Mise en situation 1 : Requête JPQL, Exception & Controller
+    //=========================================================================
+
+
+    List<ReservationResponse> RechercheReservation(
+            String status,String email,String nomCategorie,int quantiteMin
+    );
+
+
+
+
 }

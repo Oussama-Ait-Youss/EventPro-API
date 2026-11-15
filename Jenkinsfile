@@ -40,17 +40,22 @@ pipeline {
                 }
 
         stage('4. SonarQube Static Analysis') {
-            steps {
-                withSonarQubeEnv('SonarQube-Server') {
-                    // Runs SonarScanner to analyze code smells, bugs, duplications, and coverage
-                    sh './mvnw sonar:sonar \
-                        -Dsonar.projectKey=EventPro \
-                        -Dsonar.projectName=EventPro \
-                        -Dsonar.java.binaries=target/classes \
-                        -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml'
+                    steps {
+                        script {
+                            // Reference the SonarScanner tool configured in Jenkins Global Tools
+                            def scannerHome = tool 'SonarScanner'
+                            withSonarQubeEnv('SonarQube-Server') {
+                                sh "${scannerHome}/bin/sonar-scanner \
+                                    -Dsonar.projectKey=EventPro \
+                                    -Dsonar.projectName=EventPro \
+                                    -Dsonar.java.binaries=target/classes \
+                                    -Dsonar.sources=src/main/java \
+                                    -Dsonar.tests=src/test/java \
+                                    -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml"
+                            }
+                        }
+                    }
                 }
-            }
-        }
 
         stage('5. Quality Gate Check') {
             steps {

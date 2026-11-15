@@ -69,18 +69,20 @@ public class ReservationController {
     //Mise en situation 1 : Requête JPQL, Exception & Controller
     //==========================================================
 
-    @GetMapping("/{reservationId}")
-    public ResponseEntity<ReservationResponse> RechercheReservation(
-
-            @Valid @RequestParam String status,
-            @Valid @RequestParam String email,
-            @Valid @RequestParam String nomCategorie,
-            @Valid @RequestParam(defaultValue = "1") int quantiteMin
-    ) {
-
-        return ResponseEntity.ok(
-                reservationService.RechercheReservation(status,email,nomCategorie,quantiteMin);
-        );
-    }
+//    @GetMapping("/{reservationId}")
+//    public ResponseEntity<ReservationResponse> RechercheReservation(
+//
+//
+//            @Valid @RequestParam Long eventId,
+//            @Valid @RequestParam String status,
+//            @Valid @RequestParam String email,
+//            @Valid @RequestParam String nomCategorie,
+//            @Valid @RequestParam(defaultValue = "1") int quantiteMin
+//    ) {
+//
+//        return ResponseEntity.ok(
+//                reservationService.RechercheReservation(eventId,status,email,nomCategorie,quantiteMin)
+//        );
+//    }
 
 }

@@ -33,9 +33,7 @@ public interface ReservationService {
     //=========================================================================
 
 
-    List<ReservationResponse> RechercheReservation(
-            String status,String email,String nomCategorie,int quantiteMin
-    );
+    List<ReservationResponse> RechercheReservation(Long eventId,String status,String email,String nomCategorie,int quantityMin);
 
 
 

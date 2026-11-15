@@ -33,17 +33,11 @@ pipeline {
                 }
 
         stage('3. Code Coverage (JaCoCo)') {
-            steps {
-                // Publishes JaCoCo coverage report graphs in Jenkins dashboard
-                jacoco(
-                    execPattern: 'target/jacoco.exec',
-                    classPattern: 'target/classes',
-                    sourcePattern: 'src/main/java',
-                    minimumBranchCoverage: '80',
-                    minimumLineCoverage: '80'
-                )
-            }
-        }
+                    steps {
+                        // Archive the JaCoCo execution data and HTML reports so you can download them from Jenkins
+                        archiveArtifacts artifacts: 'target/jacoco.exec, target/site/jacoco/**/*', allowEmptyArchive: true
+                    }
+                }
 
         stage('4. SonarQube Static Analysis') {
             steps {

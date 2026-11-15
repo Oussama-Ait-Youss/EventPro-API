@@ -21,14 +21,12 @@ pipeline {
 
         stage('2. Build & Unit Tests (JUnit 5 / Mockito)') {
                     steps {
-                        // Grant execution rights to Maven wrapper
                         sh 'chmod +x mvnw'
-                        // Compiles code and runs unit tests, generating JaCoCo execution data
-                        sh './mvnw clean test-compile test jacoco:report'
+                        // Added the -U flag to force update/re-download of plugins like surefire
+                        sh './mvnw clean test-compile test jacoco:report -U'
                     }
                     post {
                         always {
-                            // Archives JUnit test reports in Jenkins
                             junit 'target/surefire-reports/*.xml'
                         }
                     }

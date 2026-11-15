@@ -3,7 +3,7 @@ pipeline {
 
     tools {
         // Matches the Java 21 / Maven environment in your custom Jenkins container
-        maven 'Maven 3.x'
+        maven 'Maven'
     }
 
     environment {

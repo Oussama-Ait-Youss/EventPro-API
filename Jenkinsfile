@@ -74,14 +74,14 @@ pipeline {
             }
         }
 
-        stage('7. Dockerisation') {
-                    steps {
-                        script {
-                            // Use -f to point directly to your docker.jenkins file
-                            sh 'docker build -f docker.jenkins -t eventpro-app:${env.BUILD_NUMBER} -t eventpro-app:latest .'
-                        }
-                    }
-                }
+//        stage('7. Dockerisation') {
+//                    steps {
+//                        script {
+//                            // Use single quotes to prevent Groovy from trying to evaluate variables prematurely
+//                            sh 'docker build -f docker.jenkins -t eventpro-app:${BUILD_NUMBER} -t eventpro-app:latest .'
+//                        }
+//                    }
+//                }
     }
 
     post {

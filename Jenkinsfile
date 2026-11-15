@@ -75,13 +75,13 @@ pipeline {
         }
 
         stage('7. Dockerisation') {
-            steps {
-                // Builds versioned Docker image using the Docker CLI mounted from the host
-                script {
-                    sh "docker build -t ${env.IMAGE_NAME}:${env.IMAGE_TAG} -t ${env.IMAGE_NAME}:latest ."
+                    steps {
+                        script {
+                            // Use -f to point directly to your docker.jenkins file
+                            sh 'docker build -f docker.jenkins -t eventpro-app:${env.BUILD_NUMBER} -t eventpro-app:latest .'
+                        }
+                    }
                 }
-            }
-        }
     }
 
     post {
